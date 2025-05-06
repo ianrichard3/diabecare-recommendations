@@ -20,3 +20,14 @@ BASIC_RECOMMENDATIONS = {
     "Monitorear con mayor frecuencia, riesgo de cetoacidosis"
   ]
 }
+
+
+
+
+# Recomendaciones
+from datetime import datetime, timedelta
+
+
+BREAKFAST_MAX_TIME = datetime.now().replace(hour=12, minute=0, second=0)
+EXERCISE_START_SCHEDULE = datetime.now().replace(hour=13, minute=0, second=0)
+
