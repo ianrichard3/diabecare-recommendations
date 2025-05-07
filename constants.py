@@ -1,12 +1,10 @@
 USER_STATES = [
     "just_woke_up",
-    "having_breakfast",
+    "main_meal",
+    "after_meal",
     "pre_workout",
     "working_out",
     "post_workout",
-    "having_lunch",
-    "having_snack",
-    "having_dinner",
     "studying",
     "working",
     "under_stress",
@@ -17,13 +15,17 @@ USER_STATES = [
 ]
 
 GLUCOSE_STATES = [
-    "normoglycemia",
-    "mild_hypoglycemia",
-    "moderate_hypoglycemia",
-    "severe_hypoglycemia",
-    "mild_hyperglycemia",
-    "moderate_hyperglycemia",
-    "severe_hyperglycemia"
+  "normoglycemia",
+  "mild_hypoglycemia",       # misma recomendacion
+  "moderate_hypoglycemia",   # misma recomendacion
+  "severe_hypoglycemia",     # misma recomendacion
+  "dangerous_hypoglycemia",
+  "mild_hyperglycemia",             # metete insulina
+  "moderate_hyperglycemia",         # metete insulina
+  "severe_hyperglycemia",           # metete insulina
+  "very_severe_hyperglycemia",      # metete insulina
+  "dangerous_hyperglycemia",        # metete insulina
+  "critical_hyperglycemia"
 ]
 
 GLUCOSE_TRENDS = [

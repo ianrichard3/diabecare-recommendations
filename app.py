@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from validators import validate_glucose_state, validate_user_state, get_body_data, validate_glucose_trend
+from recommendations.recommendations import generate_full_recommendation
 
 
 
@@ -31,17 +32,21 @@ def generate_recommendation():
         return jsonify({"error": f"Invalid value for glucose_state: {glucose_state}"}), 400
     if not validate_glucose_trend(glucose_trend):
         return jsonify({"error": f"Invalid value for glucose_trend: {glucose_trend}"}), 400
+    
+    
+    recommendations = generate_full_recommendation(user_state, glucose_state, glucose_trend)
 
     return jsonify({
         "status": "success",
         "states": f"Glucose: {glucose_state} - User: {user_state} - Trend: {glucose_trend}",
         "format": "json",
-        "recommendation": {
-            "activity": "N/A",
-            "insulin": "N/A",
-            "food": "N/A"
+        "recommendation": recommendations if recommendations else {
+            "intake": "No recommendation",
+            "insulin": "No recommendation",
+            "activity": "No recommendation"
         }
     }), 200
+
 
 
 
