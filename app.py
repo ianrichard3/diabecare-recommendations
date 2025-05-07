@@ -1,60 +1,47 @@
 from flask import Flask, request, jsonify
-from validators import validate_float, get_body_data
-from recommendations import generate_basic_recommendation
+from validators import validate_glucose_state, validate_user_state, get_body_data, validate_glucose_trend
+
+
 
 app = Flask(__name__)
 
-@app.route("/get-basic-recommendation", methods=["POST"])
-def get_basic_recommendation():
+
+@app.route('/recommendation', methods=["POST"])
+def generate_recommendation():
     data = get_body_data(request)
 
-    if not validate_float(data.get("glucose_level")):
-        return jsonify({
-          "message": "Invalid glucose level",
-          "format": "json" if request.is_json else "form"
-        }), 400
+    user_state = data.get("user_state")
+    glucose_state = data.get("glucose_state")
+    glucose_trend = data.get("glucose_trend")
 
-    glucose_level = data.get("glucose_level")
-    recommendation = generate_basic_recommendation(glucose_level)
+    missing_fields = []
+    if user_state is None:
+        missing_fields.append("user_state")
+    if glucose_state is None:
+        missing_fields.append("glucose_state")
+    if glucose_trend is None:
+        missing_fields.append("glucose_trend")
+
+    if missing_fields:
+        return jsonify({"error": f"Missing required field(s): {', '.join(missing_fields)}"}), 400
+
+    if not validate_user_state(user_state):
+        return jsonify({"error": f"Invalid value for user_state: {user_state}"}), 400
+    if not validate_glucose_state(glucose_state):
+        return jsonify({"error": f"Invalid value for glucose_state: {glucose_state}"}), 400
+    if not validate_glucose_trend(glucose_trend):
+        return jsonify({"error": f"Invalid value for glucose_trend: {glucose_trend}"}), 400
 
     return jsonify({
         "status": "success",
-        "glucose_level": f"{glucose_level} mg/dL",
-        "recommendation": f"{recommendation}",
-        "format": "json" if request.is_json else "form",
+        "states": f"Glucose: {glucose_state} - User: {user_state} - Trend: {glucose_trend}",
+        "format": "json",
+        "recommendation": {
+            "activity": "N/A",
+            "insulin": "N/A",
+            "food": "N/A"
+        }
     }), 200
-
-
-
-
-
-from recommendations import generate_recommendations
-from datetime import datetime
-# Multi criteria recommendation
-@app.route("/get-recommendations", methods=["POST"])
-def get_recommendations():
-    data = get_body_data(request)
-
-    if not validate_float(data.get("glucose_level")):
-        return jsonify({
-          "message": "Invalid glucose level",
-          "format": "json" if request.is_json else "form"
-        }), 400
-
-    glucose_level = data.get("glucose_level")
-    recommendation = generate_recommendations(glucose_level)
-
-    return jsonify({
-    "status": "success",
-    "glucose_level": f"{glucose_level} mg/dL",
-    "current_time": f"{datetime.now()}",
-    "recommendations": {
-        "intake_recommendation": recommendation.get("intake", ""),
-        "insulin_recommendation": recommendation.get("insulin", ""),
-        "activity_recommendation": recommendation.get("activity", ""),
-    },
-    "format": "json" if request.is_json else "form",
-}), 200
 
 
 
