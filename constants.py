@@ -33,3 +33,24 @@ SCHEDULE = {
         "LUNCH_SCHEDULE": (datetime.now().replace(hour=12, minute=0, second=0), datetime.now().replace(hour=15, minute=0, second=0))
           }
 
+
+
+
+user_states = [
+    "just_woke_up",
+    "having_breakfast",
+    "pre_workout",
+    "working_out",
+    "post_workout",
+    "having_lunch",
+    "having_snack",
+    "having_dinner",
+    "studying",
+    "working",
+    "under_stress",
+    "resting",
+    "pre_sleep",
+    "sleeping",
+    "prolonged_fasting",
+    
+]
