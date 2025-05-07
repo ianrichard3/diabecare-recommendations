@@ -27,7 +27,7 @@ def generate_basic_recommendation(glucose_level):
 # ========================================================================
 
 from datetime import datetime, timedelta
-from constants import BREAKFAST_MAX_TIME, EXERCISE_START_SCHEDULE
+from constants import SCHEDULE
 
 
 
@@ -96,18 +96,50 @@ def generate_prev_exercise_recommendation(glucose_level):
     return recommendations
 
 
+def generate_lunch_recommendation(glucose_level):
+    recommendations = {}
 
+    if glucose_level < 70:
+        # LOW
+        recommendations["intake"] = "Asegurar la ingesta de suficientes carbohidratos en el almuerzo (combinar simples y complejos)."
+        recommendations["insulin"] = "Evaluar la necesidad de reducir la dosis de insulina si hay actividad intensa planificada."
+        recommendations["activity"] = "Evitar ejercicio hasta estabilizar niveles."
+
+    elif 70 <= glucose_level <= 140:
+        # OK
+        recommendations["intake"] = "Almuerzo equilibrado con proteínas, carbohidratos complejos y grasas saludables."
+        recommendations["insulin"] = "Mantener la rutina sin ajustes mayores, salvo indicación específica."
+        recommendations["activity"] = "Ejercicio permitido según planificación habitual."
+
+    elif 141 <= glucose_level <= 250:
+        # HIGH
+        recommendations["intake"] = "Reducir el consumo de carbohidratos y priorizar alimentos con bajo índice glucémico."
+        recommendations["insulin"] = "Sugerir una caminata breve post almuerzo para ayudar a estabilizar los niveles."
+        recommendations["activity"] = "Actividad física leve post comida puede ser beneficiosa."
+
+    else:  # >250
+        # VERY HIGH
+        recommendations["intake"] = "Evitar ingesta de carbohidratos. Priorizar líquidos e hidratación controlada."
+        recommendations["insulin"] = "Consultar protocolo de corrección con insulina rápida antes de almorzar."
+        recommendations["activity"] = "Evitar cualquier actividad física, riesgo de cetoacidosis."
+
+    return recommendations
 
 
 def generate_recommendations(glucose_level):
     now = datetime.now()
-    if now < BREAKFAST_MAX_TIME:
+    if now < SCHEDULE.get("BREAKFAST_SCHEDULE")[0]:
         # if it's before breakfast
         recommendations = generate_breakfast_recommendation(glucose_level)
         
-    elif EXERCISE_START_SCHEDULE - timedelta(hours=1) <= now < EXERCISE_START_SCHEDULE:
+    elif SCHEDULE.get("EXERCISE_SCHEDULE")[0] - timedelta(hours=1) <= now < SCHEDULE.get("EXERCISE_SCHEDULE")[0]:
+        # Before doing exercise
         recommendations = generate_prev_exercise_recommendation(glucose_level)
         
+    elif SCHEDULE.get("LUNCH_SCHEDULE")[0] <= now < SCHEDULE.get("LUNCH_SCHEDULE")[1]:
+        # Before lunch
+        recommendations = generate_lunch_recommendation(glucose_level)
+
     else:
         recommendations = {}
 

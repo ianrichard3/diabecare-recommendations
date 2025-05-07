@@ -27,7 +27,9 @@ BASIC_RECOMMENDATIONS = {
 # Recomendaciones
 from datetime import datetime, timedelta
 
-
-BREAKFAST_MAX_TIME = datetime.now().replace(hour=12, minute=0, second=0)
-EXERCISE_START_SCHEDULE = datetime.now().replace(hour=13, minute=0, second=0)
+SCHEDULE = {
+        "BREAKFAST_SCHEDULE": (datetime.now().replace(hour=6, minute=0, second=0), datetime.now().replace(hour=10, minute=0, second=0)),
+        "EXERCISE_SCHEDULE": (datetime.now().replace(hour=17, minute=0, second=0), datetime.now().replace(hour=19, minute=0, second=0)),
+        "LUNCH_SCHEDULE": (datetime.now().replace(hour=12, minute=0, second=0), datetime.now().replace(hour=15, minute=0, second=0))
+          }
 
