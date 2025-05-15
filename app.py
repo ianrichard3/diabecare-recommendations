@@ -25,7 +25,8 @@ def recibir_datos():
 
     return jsonify({
         "status": "success",
-        "glucose_level": f"{glucose_level} mg/dL",
+        "glucose_level_string": f"{glucose_level} mg/dL",
+        "glucose_level": glucose_level,
         "recommendation": f"{recommendation}",
         "format": "json" if request.is_json else "form"
     }), 200
