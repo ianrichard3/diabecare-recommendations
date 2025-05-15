@@ -1,6 +1,6 @@
 # Run Guide
 Create virtual environment: `python -m venv venv`
-Activate environment:`venv/Scripts/activate`
+Activate environment:`venv\Scripts\activate`
 Install dependencies: `pip install -r requirements.txt`
 Run app.py: `python -m app.py`
 
